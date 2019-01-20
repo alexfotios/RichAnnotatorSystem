@@ -1,6 +1,6 @@
 # RichAnnotatorSystem
 Rich Annotator System is implemented as a "code overlay" on ShareLatex's free and open source code.
-It modifies sharelatex into an html2pdf online multi-user collaboration platform.
+It modifies sharelatex into an html2pdf online multi-user collaboration platform. The html2pdf engine is wkhtmltopdf
 
 # Installation
 1. Follow the sharelatex installation procedure as outlined here: https://github.com/sharelatex/sharelatex/wiki/Quick-Start-Guide
