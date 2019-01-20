@@ -1,0 +1,389 @@
+script(type='text/ng-template', id='newTagModalTemplate')
+	.modal-header
+		button.close(
+			type="button"
+			data-dismiss="modal"
+			ng-click="cancel()"
+		) &times;
+		h3 #{translate("create_new_folder")}
+	.modal-body
+		form(name="newTagForm", novalidate)
+			input.form-control(
+				type="text",
+				placeholder="New Folder Name",
+				required,
+				ng-model="inputs.newTagName",
+				on-enter="create()",
+				focus-on="open",
+				stop-propagation="click"
+			)
+	.modal-footer
+		.modal-footer-left
+			span.text-danger.error(ng-show="state.error") #{translate("generic_something_went_wrong")}
+		//- We stop propagation to stop the clicks from closing the
+		//- 'move to folder' menu.
+		button.btn.btn-default(
+			ng-click="cancel()"
+			stop-propagation="click"
+		) #{translate("cancel")}
+		button.btn.btn-primary(
+			ng-disabled="newTagForm.$invalid || state.inflight"
+			ng-click="create()"
+			stop-propagation="click"
+		)
+			span(ng-show="!state.inflight") #{translate("create")}
+			span(ng-show="state.inflight") #{translate("creating")}...
+
+script(type='text/ng-template', id='deleteTagModalTemplate')
+	.modal-header
+		button.close(
+			type="button"
+			data-dismiss="modal"
+			ng-click="cancel()"
+		) &times;
+		h3 #{translate("delete_folder")}
+	.modal-body
+		p #{translate("about_to_delete_folder")}
+		ul
+			li
+				strong {{tag.name}}
+	.modal-footer
+		.modal-footer-left
+			span.text-danger.error(ng-show="state.error") #{translate("generic_something_went_wrong")}
+		button.btn.btn-default(
+			ng-click="cancel()"
+		) #{translate("cancel")}
+		button.btn.btn-danger(
+			ng-click="delete()",
+			ng-disabled="state.inflight"
+		)
+			span(ng-show="state.inflight") #{translate("deleting")}...
+			span(ng-show="!state.inflight") #{translate("delete")}
+
+script(type='text/ng-template', id='renameTagModalTemplate')
+	.modal-header
+		button.close(
+			type="button"
+			data-dismiss="modal"
+			ng-click="cancel()"
+		) &times;
+		h3 #{translate("rename_folder")}
+	.modal-body
+		form(name="renameTagForm", novalidate)
+			input.form-control(
+				type="text",
+				placeholder="Tag Name",
+				ng-model="inputs.tagName",
+				required,
+				on-enter="rename()",
+				focus-on="open"
+			)
+	.modal-footer
+		.modal-footer-left
+			span.text-danger.error(ng-show="state.error") #{translate("generic_something_went_wrong")}
+		button.btn.btn-default(ng-click="cancel()") #{translate("cancel")}
+		button.btn.btn-primary(
+			ng-click="rename()",
+			ng-disabled="renameTagForm.$invalid || state.inflight"
+		)
+			span(ng-show="!state.inflight") #{translate("rename")}
+			span(ng-show="state.inflight") #{translate("renaming")}...
+
+script(type='text/ng-template', id='renameProjectModalTemplate')
+	.modal-header
+		button.close(
+			type="button"
+			data-dismiss="modal"
+			ng-click="cancel()"
+		) &times;
+		h3 #{translate("rename_project")}
+	.modal-body
+		.alert.alert-danger(ng-show="state.error.message") {{ state.error.message}} 
+		.alert.alert-danger(ng-show="state.error && !state.error.message") #{translate("generic_something_went_wrong")}
+		form(name="renameProjectForm", novalidate)
+			input.form-control(
+				type="text",
+				placeholder="Project Name",
+				ng-model="inputs.projectName",
+				required,
+				on-enter="rename()",
+				focus-on="open"
+			)
+	.modal-footer
+		button.btn.btn-default(ng-click="cancel()") #{translate("cancel")}
+		button.btn.btn-primary(
+			ng-click="rename()",
+			ng-disabled="renameProjectForm.$invalid || state.inflight"
+		)
+			span(ng-show="!state.inflight") #{translate("rename")}
+			span(ng-show="state.inflight") #{translate("renaming")}...
+
+script(type='text/ng-template', id='cloneProjectModalTemplate')
+	.modal-header
+		button.close(
+			type="button"
+			data-dismiss="modal"
+			ng-click="cancel()"
+		) &times;
+		h3 #{translate("copy_project")}
+	.modal-body
+		.alert.alert-danger(ng-show="state.error.message") {{ state.error.message}} 
+		.alert.alert-danger(ng-show="state.error && !state.error.message") #{translate("generic_something_went_wrong")}
+		form(name="cloneProjectForm", novalidate)
+			.form-group
+				label #{translate("new_name")}
+				input.form-control(
+					type="text",
+					placeholder="New Project Name",
+					required,
+					ng-model="inputs.projectName",
+					on-enter="clone()",
+					focus-on="open"
+				)
+	.modal-footer
+		button.btn.btn-default(
+			ng-disabled="state.inflight"
+			ng-click="cancel()"
+		) #{translate("cancel")}
+		button.btn.btn-primary(
+			ng-disabled="cloneProjectForm.$invalid || state.inflight"
+			ng-click="clone()"
+		)
+			span(ng-hide="state.inflight") #{translate("copy")}
+			span(ng-show="state.inflight") #{translate("copying")} ...
+
+script(type='text/ng-template', id='newProjectModalTemplate')
+	.modal-header
+		button.close(
+			type="button"
+			data-dismiss="modal"
+			ng-click="cancel()"
+		) &times;
+		h3 #{translate("new_project")}
+	.modal-body
+		.alert.alert-danger(ng-show="state.error.message") {{ state.error.message}} 
+		.alert.alert-danger(ng-show="state.error && !state.error.message") #{translate("generic_something_went_wrong")}
+		form(novalidate, name="newProjectForm")
+			input.form-control(
+				type="text",
+				placeholder="Project Name",
+				required,
+				ng-model="inputs.projectName",
+				on-enter="create()",
+				focus-on="open"
+			)
+	.modal-footer
+		button.btn.btn-default(
+			ng-disabled="state.inflight"
+			ng-click="cancel()"
+		) #{translate("cancel")}
+		button.btn.btn-primary(
+			ng-disabled="newProjectForm.$invalid || state.inflight"
+			ng-click="create()"
+		)
+			span(ng-hide="state.inflight") #{translate("create")}
+			span(ng-show="state.inflight") #{translate("creating")} ...
+
+script(type='text/ng-template', id='deleteProjectsModalTemplate')
+	.modal-header
+		button.close(
+			type="button"
+			data-dismiss="modal"
+			ng-click="cancel()"
+		) &times;
+		h3(ng-if="action == 'delete'") #{translate("delete_projects")}
+		h3(ng-if="action == 'leave'") #{translate("leave_projects")}
+		h3(ng-if="action == 'delete-and-leave'") #{translate("delete_and_leave_projects")}
+	.modal-body
+		div(ng-show="projectsToDelete.length > 0")
+			p #{translate("about_to_delete_projects")}
+			ul
+				li(ng-repeat="project in projectsToDelete | orderBy:'name'")
+					strong {{project.name}}
+		div(ng-show="projectsToLeave.length > 0")
+			p #{translate("about_to_leave_projects")}
+			ul
+				li(ng-repeat="project in projectsToLeave | orderBy:'name'")
+					strong {{project.name}}
+	.modal-footer
+		button.btn.btn-default(
+			ng-click="cancel()"
+		) #{translate("cancel")}
+		button.btn.btn-danger(
+			ng-click="delete()"
+		) #{translate("confirm")}
+
+script(type="text/template", id="qq-project-uploader-template")
+	div.qq-uploader-selector
+		div(qq-hide-dropzone="").qq-upload-drop-area-selector.qq-upload-drop-area
+			span.qq-upload-drop-area-text-selector #{translate('drop_files_here_to_upload')}
+		div.qq-upload-button-selector.btn.btn-primary.btn-lg
+			div #{translate('select_a_zip_file')}
+		span.or.btn-lg #{translate('or')}
+		span.drag-here.btn-lg #{translate('drag_a_zip_file')}
+		span.qq-drop-processing-selector
+			span #{translate('creating_project')}
+			span.qq-drop-processing-spinner-selector
+		ul.qq-upload-list-selector
+			li
+				div.qq-progress-bar-container-selector
+					div(
+						role="progressbar"
+						aria-valuenow="0"
+						aria-valuemin="0"
+						aria-valuemax="100"
+						class="qq-progress-bar-selector qq-progress-bar"
+					)
+				span.qq-upload-file-selector.qq-upload-file
+				span.qq-upload-size-selector.qq-upload-size
+				a(type="button").qq-btn.qq-upload-cancel-selector.qq-upload-cancel #{translate('cancel')}
+				button(type="button").qq-btn.qq-upload-retry-selector.qq-upload-retry #{translate('retry')}
+				span(role="status").qq-upload-status-text-selector.qq-upload-status-text
+
+script(type="text/ng-template", id="uploadProjectModalTemplate")
+	.modal-header
+		button.close(
+			type="button"
+			data-dismiss="modal"
+			ng-click="cancel()"
+		) &times;
+		h3 #{translate("upload_zipped_project")}
+	.modal-body(
+		fine-upload
+		endpoint="/project/new/upload"
+		template-id="qq-project-uploader-template"
+		multiple="false"
+		allowed-extensions="['zip']"
+		on-complete-callback="onComplete"
+	)
+	.modal-footer
+		button.btn.btn-default(ng-click="cancel()") #{translate("cancel")}
+
+script(type="text/ng-template", id="userProfileModalTemplate")
+	.modal-header
+		button.close(
+			type="button"
+			data-dismiss="modal"
+			ng-click="done()"
+		) &times;
+		h3 #{translate("your_profile")}
+	.modal-body
+		form(enctype='multipart/form-data', method='post')
+
+			.form-group
+				label(for="first_name") #{translate("first_name")}
+				input.form-control(
+					type='text',
+					name='first_name',
+					ng-model="userInfoForm.first_name",
+					placeholder="First Name",
+					select-when="formVisable"
+				)
+
+			.form-group
+				label(for="last_name") #{translate("last_name")}
+				input.form-control(
+					type='text',
+					name='last_name',
+					ng-model="userInfoForm.last_name",
+					placeholder='Last Name'
+				)
+
+			.form-group.user_details_auto_complete
+				label(for="institution") #{translate("institution")}
+				autocomplete(
+					ng-model="userInfoForm.institution",
+					name="institution",
+					data="institutions",
+					on-type="updateInstitutionsList",
+					attr-placeholder="Institution",
+					attr-inputclass="form-control"
+				)
+
+			.form-group.user_details_auto_complete
+				label(for="role") #{translate("role")}
+				autocomplete(
+					ng-model="userInfoForm.role",
+					name="role",
+					data="roles",
+					attr-placeholder="Role",
+					attr-inputclass="form-control"
+				)
+
+
+	.modal-footer
+		button.btn.btn-info(ng-click="done()") #{translate("done")}
+
+script(type="text/ng-template", id="v1ImportModalTemplate")
+	.modal-header
+		button.close(ng-click="dismiss()") &times;
+		h3 Move Project to Overleaf v2
+
+	.modal-body.v1-import-wrapper
+		.v1-import-step-1(ng-show="step === 1")
+			.v1-import-row
+				.v1-import-col
+					img.v1-import-img(
+						src="/img/v1-import/v2-editor.png"
+						alt="The new V2 Editor."
+					)
+				.v1-import-col
+					h2.v1-import-title Try the Overleaf v2 Editor
+					p The Overleaf v2 editor has many great new features including:
+					ul
+						li Faster real-time collaboration
+						li See your coauthors’ cursors
+						li Chat with math support
+						li Tracked changes and commenting
+						li Improved LaTeX autocomplete
+						li Two-way Dropbox sync
+			p.v1-import-cta Would you like to move #[strong {{project.name}}] into Overleaf v2?
+
+		.v1-import-step-2(ng-show="step === 2")
+			.v1-import-row
+				.v1-import-warning.v1-import-col(aria-label="Warning symbol.")
+					i.fa.fa-exclamation-triangle
+				.v1-import-col
+					h2.v1-import-title #[strong Warning:] Overleaf v2 is Experimental
+					p We are still working hard to bring some Overleaf v1 features to the v2 editor. If you move this project to v2 now, you will:
+					ul
+						li Lose access your project via git
+						li Not be able to use the Journals and Services menu to submit directly to our partners
+						li Not be able to use the Rich Text (WYSIWYG) mode
+						li Not be able to use linked files (to URLs or to files in other Overleaf projects)
+						li Not be able to use some bibliography integrations (Zotero, CiteULike)
+						li Lose access to your labelled versions and not be able to create new labelled versions
+			.v1-import-cta
+				p
+					strong Please note: you cannot move this project back to v1 once you have moved it to v2. If this is an important project, please consider making a clone in v1 before you move the project to v2.
+				p Are you sure you want to move #[strong {{project.name}}] into Overleaf v2?
+
+	.modal-footer.v1-import-footer
+		div(ng-show="step === 1")
+			if settings.overleaf && settings.overleaf.host
+				a.btn.btn-primary.v1-import-btn(
+					ng-href=settings.overleaf.host + "/{{project.id}}"
+				) No thanks, open in v1
+			button.btn.btn-primary.v1-import-btn(
+				ng-click="moveToConfirmation()"
+			) Yes, move project to v2
+		div(ng-show="step === 2")
+			form(
+				async-form="v1Import",
+				name="v1ImportForm",
+				action="{{'/overleaf/project/'+ project.id + '/import'}}"
+				method="POST"
+				ng-cloak
+			)
+				input(name='_csrf', type='hidden', value=csrfToken)
+				form-messages(for="v1ImportForm")
+				if settings.overleaf && settings.overleaf.host
+					a.btn.btn-primary.v1-import-btn(
+						ng-href=settings.overleaf.host + "/{{project.id}}"
+						ng-class="{disabled: v1ImportForm.inflight || v1ImportForm.response.success}"
+					) No thanks, open in v1
+				input.btn.btn-primary.v1-import-btn(
+					type="submit",
+					value="Yes, move project to v2"
+					ng-disabled="v1ImportForm.inflight || v1ImportForm.response.success"
+				)
