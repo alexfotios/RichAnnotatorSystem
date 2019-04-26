@@ -37,7 +37,7 @@ $outfile = "/var/www/html/pdf/$id.pdf";
 
 file_put_contents($infile, $html);
 
-exec( "xvfb-run html2pdf $infile $outfile", $out, $ret);
+exec( "xvfb-run wkhtmltopdf $infile $outfile", $out, $ret);
 
 
 //header('Content-Type: application/pdf');
