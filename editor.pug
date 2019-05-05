@@ -96,6 +96,7 @@ block content
 		.modal-body(ng-bind-html="message")
 
 block requirejs
+	script(src="https://rawgit.com/showdownjs/showdown/develop/dist/showdown.min.js", type="text/javascript", charset="utf-8")
 	script(type="text/javascript" src='/socket.io/socket.io.js')
 
 	//- don't use cdn for workers

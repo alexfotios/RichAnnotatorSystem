@@ -1,5 +1,6 @@
 div.full-size.pdf(ng-controller="PdfController")
 	.toolbar.toolbar-pdf(ng-class="{ 'uncompiled-changes': uncompiledChanges && !autoCompileLintingError }")
+		a(href='#',ng-click='recompile2()') Convert to HTML		
 		.btn-group.btn-recompile-group#recompile(
 			dropdown,
 			tooltip-html="'"+translate('recompile_pdf')+" <span class=\"keyboard-shortcut\">({{modifierKey}} + Enter)</span>'"
@@ -67,6 +68,7 @@ div.full-size.pdf(ng-controller="PdfController")
 			tooltip-placement="bottom"
 		)
 			i.fa.fa-fw.fa-stop()
+
 			
 		//-	
 			a.log-btn(

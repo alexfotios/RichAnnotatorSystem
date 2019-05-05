@@ -258,7 +258,7 @@ function() {
         App.controller("NewDocModalController", ["$scope", "ide", "$modalInstance", "$timeout", "parent_folder", function($scope, ide, $modalInstance, $timeout, parent_folder) {
             return $scope.inputs = {
                 //name: "name.tex"
-                name: "name.html"
+                name: "name.md"
             },
             $scope.state = {
                 inflight: !1
@@ -24244,7 +24244,8 @@ function() {
                         session = editor.getSession(),
                         null != session && session.destroy();
                         try {
-                            scope.fileName.match(/\.(Rtex|bbl)$/i) ? mode = "ace/mode/latex" : scope.fileName.match(/\.(sty|cls|clo)$/) ? mode = "ace/mode/tex" : scope.fileName.match(/\.(htm|html)$/) ? mode = "ace/mode/html" : (mode = ModeList.getModeForPath(scope.fileName).mode,
+                            //scope.fileName.match(/\.(Rtex|bbl)$/i) ? mode = "ace/mode/latex" : scope.fileName.match(/\.(sty|cls|clo)$/) ? mode = "ace/mode/tex" : scope.fileName.match(/\.(htm|html)$/) ? mode = "ace/mode/html" : (mode = ModeList.getModeForPath(scope.fileName).mode,
+                            scope.fileName.match(/\.(htm|html)$/) ? mode = "ace/mode/html" :scope.fileName.match(/\.(md|markdown)$/) ? mode = "ace/mode/markdown" : (mode = ModeList.getModeForPath(scope.fileName).mode,
                             "ace/mode/text" === mode && (mode = "ace/mode/plain_text"))
                         } catch (_error) {
                             mode = "ace/mode/plain_text"
@@ -28797,7 +28798,20 @@ function() {
                 path
             }
             ,
-            $scope.recompile = function(options) {
+	    $scope.recompile2 = function()
+	    {
+		//alert("Hello!");
+
+		var myeditor = ace.edit(document.getElementsByClassName("ace-editor-body")[0]);
+		var md = myeditor.getSession().getDocument().getValue();
+
+		var converter = new showdown.Converter();
+        	var html = converter.makeHtml(md);
+
+		document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = html;
+	    }
+	    ,
+            $scope.recompile = function(options) {//ALEX
                 //alert("recompile");
                 //document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '&nbsp;<i class="fa fa-level-up fa-flip-horizontal fa-2x"></i>&nbsp;&nbsp;Click here to preview your work as a PDF.';
                 
@@ -28821,7 +28835,8 @@ function() {
 
                 var observer = new MutationObserver(function(mutations) {
                     //console.log("CHANGED");
-                    document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '&nbsp;<i class="fa fa-level-up fa-flip-horizontal fa-2x"></i>&nbsp;&nbsp;Click here to preview your work as a PDF.';
+                    //document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '&nbsp;<i class="fa fa-level-up fa-flip-horizontal fa-2x"></i>&nbsp;&nbsp;Click here to preview your work as a PDF.';
+		    document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '<div>Use the buttons above to view your work as HTML or PDF</div>';
                 });
                 // configuration of the observer:
                 var config = { attributes: true, childList: true, characterData: true };
@@ -28831,7 +28846,7 @@ function() {
                 console.log('html = ' + html);
                 
                 var http = new XMLHttpRequest();
-                var url = 'http://35.233.2.219:81/html2pdf.php';
+                var url = 'http://rich.ppke.hu:443/html2pdf.php';
                 var params = 'html=' + encodeURIComponent(html);
                 http.open('POST', url, true);
 
@@ -28847,11 +28862,12 @@ function() {
                         //if (!fname) fname = "html.pdf";
                         if (fname)
                         {
-                            document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '<iframe style="width:100%;height:100%" src="http://35.233.2.219:81/pdf/' + fname + '" />';
+                            document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '<iframe style="width:100%;height:100%" src="http://rich.ppke.hu:443/pdf/' + fname + '" />';
                         }
                         else
                         {
-                            document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '&nbsp;<i class="fa fa-level-up fa-flip-horizontal fa-2x"></i>&nbsp;&nbsp;Click here to preview your work as a PDF.';
+                            //document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '&nbsp;<i class="fa fa-level-up fa-flip-horizontal fa-2x"></i>&nbsp;&nbsp;Click here to preview your work as a PDF.';
+		            document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '<div>Use the buttons above to view your work as HTML or PDF</div>';
                         }
                     }
                 }
