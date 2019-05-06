@@ -28823,7 +28823,12 @@ function() {
                 var myeditor = ace.edit(document.getElementsByClassName("ace-editor-body")[0]);
                 var myeditor2 = document.getElementsByClassName("ace_content")[0];
                 
-                var html = myeditor.getSession().getDocument().getValue();
+                var md = myeditor.getSession().getDocument().getValue();
+
+                var converter = new showdown.Converter();
+                var html = converter.makeHtml(md);
+
+                //var html = myeditor.getSession().getDocument().getValue();
                 //document.getElementsByClassName("ace-editor-body")[0].onchange = function(){console.log("editor changed")};
                 
                 /*

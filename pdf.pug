@@ -1,9 +1,10 @@
 div.full-size.pdf(ng-controller="PdfController")
 	.toolbar.toolbar-pdf(ng-class="{ 'uncompiled-changes': uncompiledChanges && !autoCompileLintingError }")
-		a(href='#',ng-click='recompile2()') Convert to HTML		
+		a(href='#',ng-click='recompile2()',style="white-space:nowrap;text-decoration:none;") Convert to HTML
+		a(href='#', style="visibility:hidden;width:100%;") &nbsp;
 		.btn-group.btn-recompile-group#recompile(
 			dropdown,
-			tooltip-html="'"+translate('recompile_pdf')+" <span class=\"keyboard-shortcut\">({{modifierKey}} + Enter)</span>'"
+			tooltip-html=""
 			tooltip-class="keyboard-tooltip"
 			tooltip-popup-delay="500"
 			tooltip-append-to-body="true"
@@ -18,118 +19,9 @@ div.full-size.pdf(ng-controller="PdfController")
 					ng-class="{'fa-spin': pdf.compiling }"
 				)
 				| &nbsp;&nbsp;
-				span(ng-show="!pdf.compiling") #{translate("Compile")}
-				span(ng-show="pdf.compiling") #{translate("compiling")}...
-			//-	
-				a.btn.btn-recompile.dropdown-toggle(
-					href,
-					ng-disabled="pdf.compiling",
-					dropdown-toggle
-				)
-					span.caret
-				ul.dropdown-menu.dropdown-menu-left
-					li.dropdown-header #{translate("auto_compile")}
-					li
-						a(href, ng-click="autocompile_enabled = true")
-							i.fa.fa-fw(ng-class="{'fa-check': autocompile_enabled}")
-							| &nbsp;#{translate('on')}
-					li
-						a(href, ng-click="autocompile_enabled = false")
-							i.fa.fa-fw(ng-class="{'fa-check': !autocompile_enabled}")
-							| &nbsp;#{translate('off')}
-					li.dropdown-header #{translate("compile_mode")}
-					li
-						a(href, ng-click="draft = false")
-							i.fa.fa-fw(ng-class="{'fa-check': !draft}")
-							| &nbsp;#{translate("normal")}
-					li
-						a(href, ng-click="draft = true")
-							i.fa.fa-fw(ng-class="{'fa-check': draft}")
-							| &nbsp;#{translate("fast")}&nbsp;
-							span.subdued [draft]
-					li.dropdown-header #{translate("compile_time_checks")}
-					li
-						a(href, ng-click="stop_on_validation_error = true")
-							i.fa.fa-fw(ng-class="{'fa-check': stop_on_validation_error}")
-							| &nbsp;#{translate("stop_on_validation_error")}
-					li
-						a(href, ng-click="stop_on_validation_error = false")
-							i.fa.fa-fw(ng-class="{'fa-check': !stop_on_validation_error}")
-							| &nbsp;#{translate("ignore_validation_errors")}
-					li
-						a(href, ng-click="recompile({check:true})")
-							i.fa.fa-fw()
-							| &nbsp;#{translate("run_syntax_check_now")}
-		a(
-			href
-			ng-click="stop()"
-			ng-show="pdf.compiling",
-			tooltip=translate('stop_compile')
-			tooltip-placement="bottom"
-		)
-			i.fa.fa-fw.fa-stop()
+				span(ng-show="!pdf.compiling") #{translate("Compile to PDF")}
+				span(ng-show="pdf.compiling") #{translate("Compiling")}...
 
-			
-		//-	
-			a.log-btn(
-				href
-				ng-click="toggleLogs()"
-				ng-class="{ 'active': shouldShowLogs == true }"
-				tooltip=translate('logs_and_output_files')
-				tooltip-placement="bottom"
-			)
-				i.fa.fa-fw.fa-file-text-o
-				span.label(
-					ng-show="pdf.logEntries.warnings.length + pdf.logEntries.errors.length > 0"
-					ng-class="{\
-						'label-warning': pdf.logEntries.errors.length == 0,\
-						'label-danger': pdf.logEntries.errors.length > 0\
-					}"
-				) {{ pdf.logEntries.errors.length + pdf.logEntries.warnings.length }}
-			
-		a(
-			ng-href="{{pdf.downloadUrl || pdf.url}}"
-			target="_blank"
-			ng-if="pdf.url"
-			tooltip=translate('download_pdf')
-			tooltip-placement="bottom"
-		)
-			i.fa.fa-fw.fa-download
-			
-		.toolbar-right
-			span.auto-compile-status.small(
-				ng-show="uncompiledChanges && !compiling && !autoCompileLintingError"
-			) #{translate('uncompiled_changes')}
-			span.auto-compile-status.auto-compile-error.small(
-				ng-show="autoCompileLintingError"
-				tooltip-placement="bottom"
-				tooltip=translate("code_check_failed_explanation")
-				tooltip-append-to-body="true"
-			)
-				i.fa.fa-fw.fa-exclamation-triangle
-				|
-				| #{translate("code_check_failed")}
-			a(
-				href,
-				ng-click="switchToFlatLayout()"
-				ng-show="ui.pdfLayout == 'sideBySide'"
-				tooltip=translate('full_screen')
-				tooltip-placement="bottom"
-				tooltip-append-to-body="true"
-			)
-				i.fa.fa-expand
-				i.full-screen
-			a(
-				href,
-				ng-click="switchToSideBySideLayout()"
-				ng-show="ui.pdfLayout == 'flat'"
-				tooltip=translate('split_screen')
-				tooltip-placement="bottom"
-				tooltip-append-to-body="true"
-			)
-				i.fa.fa-compress
-				i.split-screen
-				i.split-screen
 	// end of toolbar
 
 	// logs view
