@@ -142,7 +142,7 @@
             return callback(err);
           }
           //setNewPasswordUrl = "" + settings.siteUrl + "/user/activate?token=" + token + "&user_id=" + user._id;
-          setNewPasswordUrl = "" + "http://35.233.2.219" + "/user/activate?token=" + token + "&user_id=" + user._id;
+          setNewPasswordUrl = "" + "http://rich.ppke.hu" + "/user/activate?token=" + token + "&user_id=" + user._id;
           EmailHandler.sendEmail("registered", {
             to: user.email,
             setNewPasswordUrl: setNewPasswordUrl
