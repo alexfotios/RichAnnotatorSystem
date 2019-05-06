@@ -103,7 +103,7 @@
           if (error != null) {
             return callback(error);
           }
-          return ProjectEntityUpdateHandler.addDoc(project._id, project.rootFolder[0]._id, "some.html", docLines, owner_id, function(error, doc) {
+          return ProjectEntityUpdateHandler.addDoc(project._id, project.rootFolder[0]._id, "some.md", docLines, owner_id, function(error, doc) {
             if (error != null) {
               logger.err({
                 err: error
