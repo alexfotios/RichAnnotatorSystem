@@ -20,29 +20,29 @@ More specifically:
    12. Manually replace homonymous files in the docker container filesystem with the ones in this repository
        Files that need replacing under docker dir /var/www/sharelatex/web are below.
        The list below may not be complete - make sure you overwrite all homonymous files in the repository.
-       ./public/minjs/ide/file-tree/FileTreeManager.js
-       ./app/js/Features/User/UserRegistrationHandler.js
-       ./app/views/project/list/empty-project-list.pug
-       ./app/views/layout.pug
-       ./app/views/user/passwordReset.pug
-       ./public/stylesheets/style.css
-       ./app/js/Features/Project/ProjectCreationHandler.js
-       ./app/views/user/activate.pug
-       ./app/views/layout/footer.pug
-       ./app/views/project/editor/left-menu.pug
-       ./app/views/project/editor/pdf.pug
-       ./app/views/user/setPassword.pug
-       ./app/js/Features/Project/ProjectEntityUpdateHandler.js
-       ./app/views/project/editor.pug
-       ./app/views/project/editor/editor.pug
-       ./app/views/project/list/modals.pug
-       ./app/views/project/list/project-list.pug
-       ./config/settings.defaults.coffee
-       ./public/minjs/ide.js
-       ./app/views/layout/navbar.pug
-       ./app/views/user/register.pug
-       ./app/views/admin/register.pug
-       ./app/views/project/list/side-bar.pug
+       0. ./public/minjs/ide/file-tree/FileTreeManager.js
+       1. ./app/js/Features/User/UserRegistrationHandler.js
+       2. ./app/views/project/list/empty-project-list.pug
+       3. ./app/views/layout.pug
+       4. ./app/views/user/passwordReset.pug
+       5. ./public/stylesheets/style.css
+       6. ./app/js/Features/Project/ProjectCreationHandler.js
+       7. ./app/views/user/activate.pug
+       8. ./app/views/layout/footer.pug
+       9. ./app/views/project/editor/left-menu.pug
+       10. ./app/views/project/editor/pdf.pug
+       11. ./app/views/user/setPassword.pug
+       12. ./app/js/Features/Project/ProjectEntityUpdateHandler.js
+       13. ./app/views/project/editor.pug
+       14. ./app/views/project/editor/editor.pug
+       15. ./app/views/project/list/modals.pug
+       16. ./app/views/project/list/project-list.pug
+       17. ./config/settings.defaults.coffee
+       18. ./public/minjs/ide.js
+       19. ./app/views/layout/navbar.pug
+       20. ./app/views/user/register.pug
+       21. ./app/views/admin/register.pug
+       22. ./app/views/project/list/side-bar.pug
    13. Install Apache & PHP
          a. sudo apt install apache2
          b. sudo apt install php libapache2-mod-php
