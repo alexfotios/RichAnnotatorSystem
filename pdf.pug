@@ -1,7 +1,14 @@
 div.full-size.pdf(ng-controller="PdfController")
 	.toolbar.toolbar-pdf(ng-class="{ 'uncompiled-changes': uncompiledChanges && !autoCompileLintingError }")
-		a(href='#',ng-click='recompile2()',style="white-space:nowrap;text-decoration:none;") Convert to HTML
-		a(href='#', style="visibility:hidden;width:100%;") &nbsp;
+		a(href='#',ng-click='recompile2()',style="white-space:nowrap;text-decoration:none;") HTML
+		a(href='#',style="visibility:hidden;width:100%;") &nbsp;
+		a(href='#',ng-click='biEdit()',style="white-space:nowrap;text-decoration:none;") Bi-Edit
+		a(href='#',id='R2LButton',ng-click='R2LEdit()',style="white-space:nowrap;text-decoration:none;display:none;") <<
+		a(href='#',id='L2RButton',ng-click='L2REdit()',style="white-space:nowrap;text-decoration:none;display:none;") >>
+		a(href='#',style="visibility:hidden;width:100%;") &nbsp;
+		a(href='#',id='htmlDLButton',ng-click='downloadHTML()',style="white-space:nowrap;text-decoration:none;")
+			i(class="fa fa-fw fa-download")
+		a(href='#',style="visibility:hidden;width:100%;") &nbsp;
 		.btn-group.btn-recompile-group#recompile(
 			dropdown,
 			tooltip-html=""
@@ -25,7 +32,7 @@ div.full-size.pdf(ng-controller="PdfController")
 	// end of toolbar
 
 	// logs view
-	.pdf-logs(ng-show="shouldShowLogs")
+	.pdf-logs(ng-show="shouldShowLogs",style="display:none")
 		.alert.alert-success(ng-show="pdf.logEntries.all.length == 0")
 			| #{translate("no_errors_good_job")}
 

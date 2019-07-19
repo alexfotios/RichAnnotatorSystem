@@ -28798,17 +28798,151 @@ function() {
                 path
             }
             ,
+            $scope.downloadHTML = function()
+            {
+            	var myeditor = ace.edit(document.getElementsByClassName("ace-editor-body")[0]);
+                var md = myeditor.getSession().getDocument().getValue();
+
+                var converter = new showdown.Converter();
+                var html = converter.makeHtml(md);
+  		
+		//var bl = new Blob(new TextEncoder().encode(html), {type: "text/html"});
+                var bl = new Blob([html], {type: "text/plain"});
+		//var a = document.createElement("a");
+                var a = document.getElementById("htmlDLButton");
+  		a.href = URL.createObjectURL(bl);
+  		a.download = "doc.html";
+  		a.hidden = true;
+  		//document.body.appendChild(a);
+  		//a.innerHTML = "something random - nobody will see this, it doesn't matter what you put here";
+  		//a.click();
+            }
+            ,
 	    $scope.recompile2 = function()
 	    {
 		//alert("Hello!");
+
+		clearInterval($scope.biinterval);
+
+		document.getElementById("R2LButton").style.display = 'none';
+                document.getElementById("L2RButton").style.display = 'none';
+		document.getElementById("htmlDLButton").style.display = 'block';
 
 		var myeditor = ace.edit(document.getElementsByClassName("ace-editor-body")[0]);
 		var md = myeditor.getSession().getDocument().getValue();
 
 		var converter = new showdown.Converter();
         	var html = converter.makeHtml(md);
-
+                
+                document.getElementsByClassName("pdf-uncompiled ng-scope")[0].style.overflow = "scroll";
 		document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = html;
+	    }
+	    ,
+	    $scope.biEdit = function() {
+
+		clearInterval($scope.biinterval);
+
+		var b1 = document.getElementById("R2LButton");
+		var b2 = document.getElementById("L2RButton");
+		var dlb = document.getElementById("htmlDLButton");
+
+		if (b1.style.display == 'none')
+		{
+			b1.style.display = 'block';
+			b2.style.display = 'block';
+			dlb.style.display = 'none';
+		}
+		else
+		{
+                        b1.style.display = 'none';
+                        b2.style.display = 'none';
+			dlb.style.display = 'block';
+			document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '<div>Use the buttons above to view your work as HTML or PDF</div>';		
+			return;
+		}
+	
+
+		var mydiv = document.getElementsByClassName("pdf-uncompiled ng-scope")[0];
+
+		mydiv.innerHTML = "<div id=\"bieditdiv\"></div>";
+
+		var mydiv2 = document.getElementById("bieditdiv");
+		//mydiv.style.height = mydiv.parentNode.parentNode.style.height;
+		//mydiv.style.height = "3000px";
+		mydiv2.style.height = (parseInt(document.body.clientHeight) - 130) + "px";
+		var aeditor = ace.edit(mydiv2);
+		$scope.biinterval = setInterval(function(){mydiv2.style.height = (parseInt(document.body.clientHeight) - 140) + "px";aeditor.resize();}, 1000);
+		//mydiv.style.overflow = "scroll";
+
+		//var aeditor = ace.edit(mydiv2);
+    		//editor.setTheme("ace/theme/monokai");
+    		aeditor.session.setMode("ace/mode/html");
+                aeditor.setOptions({
+    			autoScrollEditorIntoView: false,
+			hScrollBarAlwaysVisible: false,
+			vScrollBarAlwaysVisible: false,
+			wrap: true
+			//maxLines: 100,
+			//minLines: 2
+    		});
+		aeditor.resize();
+		
+                var myeditor = ace.edit(document.getElementsByClassName("ace-editor-body")[0]);
+                var md = myeditor.getSession().getDocument().getValue();
+
+                var converter = new showdown.Converter();
+                var html = converter.makeHtml(md);
+
+		aeditor.setValue(html);
+	    }
+	    ,
+	    $scope.L2REdit = function() {
+		clearInterval($scope.biinterval);
+                var mydiv = document.getElementsByClassName("pdf-uncompiled ng-scope")[0];
+
+                mydiv.innerHTML = "<div id=\"bieditdiv\"></div>";
+
+                var mydiv2 = document.getElementById("bieditdiv");
+                //mydiv.style.height = mydiv.parentNode.parentNode.style.height;
+                //mydiv.style.height = "3000px";
+                mydiv2.style.height = (parseInt(document.body.clientHeight) - 130) + "px";
+                var aeditor = ace.edit(mydiv2);
+                $scope.biinterval = setInterval(function(){mydiv2.style.height = (parseInt(document.body.clientHeight) - 140) + "px";aeditor.resize();}, 1000);
+                //mydiv.style.overflow = "scroll";
+
+                //var aeditor = ace.edit(mydiv2);
+                //editor.setTheme("ace/theme/monokai");
+                aeditor.session.setMode("ace/mode/html");
+                aeditor.setOptions({
+                        autoScrollEditorIntoView: false,
+                        hScrollBarAlwaysVisible: false,
+                        vScrollBarAlwaysVisible: false,
+                        wrap: true
+                        //maxLines: 100,
+                        //minLines: 2
+                });
+                aeditor.resize();
+
+                var myeditor = ace.edit(document.getElementsByClassName("ace-editor-body")[0]);
+                var md = myeditor.getSession().getDocument().getValue();
+
+                var converter = new showdown.Converter();
+                var html = converter.makeHtml(md);
+
+                aeditor.setValue(html);		
+	    }
+	    ,
+	    $scope.R2LEdit = function() {
+                var mydiv2 = document.getElementById("bieditdiv");
+                var aeditor = ace.edit(mydiv2);
+                var html  = aeditor.getSession().getDocument().getValue();
+
+		var myeditor = ace.edit(document.getElementsByClassName("ace-editor-body")[0]);                
+
+                var converter = new showdown.Converter();
+                var md = converter.makeMarkdown(html);
+
+                myeditor.setValue(md);
 	    }
 	    ,
             $scope.recompile = function(options) {//ALEX
@@ -28817,16 +28951,28 @@ function() {
                 
                 //var html = document.getElementsByClassName("ace_content")[0].innerText;
                 //myeditor.getSession().getDocument().getValue()
+
+		clearInterval($scope.biinterval);
+
+                document.getElementById("R2LButton").style.display = 'none';
+                document.getElementById("L2RButton").style.display = 'none';
+		document.getElementById("htmlDLButton").style.display = 'block';
+
                 var mybutton = document.getElementsByClassName("fa-refresh")[1];
                 if (mybutton) mybutton.className = "fa fa-refresh fa-spin";
                 
                 var myeditor = ace.edit(document.getElementsByClassName("ace-editor-body")[0]);
                 var myeditor2 = document.getElementsByClassName("ace_content")[0];
+                var myeditor3 = document.getElementsByClassName("ace_layer ace_text-layer")[0];
+
+                //myeditor3.addEventListener('DOMNodeInserted', function(e){console.log(e.target.outerHTML)}, false);
                 
                 var md = myeditor.getSession().getDocument().getValue();
 
                 var converter = new showdown.Converter();
                 var html = converter.makeHtml(md);
+
+                html = html.replace(/src=\"\/project\/([a-z,A-Z,0-9]*)\/file\/([a-z,A-Z,0-9]*)\"/gi, "src=\"http://rich.ppke.hu/user_files/$1_$2\"");
 
                 //var html = myeditor.getSession().getDocument().getValue();
                 //document.getElementsByClassName("ace-editor-body")[0].onchange = function(){console.log("editor changed")};
@@ -28839,19 +28985,32 @@ function() {
                 
 
                 var observer = new MutationObserver(function(mutations) {
+                    /*
+                    mutations.forEach(function(mutation) 
+                    {
+                        console.log("mutation.type: "               + mutation.type);
+                        console.log("mutation.target: "             + mutation.target.outerHTML);
+                        console.log("mutation.attributeName: "      + mutation.attributeName);
+                        console.log("mutation.previousSibling: "    + mutation.previousSibling);
+                        console.log("mutation.nextSibling: "        + mutation.nextSibling);
+                        console.log("mutation.attributeNamespace: " + mutation.attributeNamespace);
+	            });
+                    */
+
                     //console.log("CHANGED");
                     //document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '&nbsp;<i class="fa fa-level-up fa-flip-horizontal fa-2x"></i>&nbsp;&nbsp;Click here to preview your work as a PDF.';
-		    document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '<div>Use the buttons above to view your work as HTML or PDF</div>';
+		    
+                    //document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '<div>Use the buttons above to view your work as HTML or PDF</div>';
                 });
                 // configuration of the observer:
-                var config = { attributes: true, childList: true, characterData: true };
+                var config = { attributes: true, childList: true, characterData: true, subtree: true};
                 // pass in the target node, as well as the observer options
-                observer.observe(myeditor2, config);
+                observer.observe(myeditor3, config);
                 
                 console.log('html = ' + html);
                 
                 var http = new XMLHttpRequest();
-                var url = 'http://rich.ppke.hu:443/html2pdf.php';
+                var url = 'https://rich.ppke.hu:81/html2pdf.php';
                 var params = 'html=' + encodeURIComponent(html);
                 http.open('POST', url, true);
 
@@ -28867,7 +29026,7 @@ function() {
                         //if (!fname) fname = "html.pdf";
                         if (fname)
                         {
-                            document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '<iframe style="width:100%;height:100%" src="http://rich.ppke.hu:443/pdf/' + fname + '" />';
+                            document.getElementsByClassName("pdf-uncompiled ng-scope")[0].innerHTML = '<iframe style="width:100%;height:100%" src="https://rich.ppke.hu:81/pdf/' + fname + '" />';
                         }
                         else
                         {
