@@ -5,6 +5,7 @@ It modifies sharelatex into an html2pdf online multi-user collaboration platform
 # Installation
 Follow the sharelatex installation procedure as outlined here: https://github.com/sharelatex/sharelatex/wiki/Quick-Start-Guide
 More specifically:
+
    0. sudo apt update
    1. sudo apt install docker.io
    2. sudo apt install docker-compose
